@@ -1,0 +1,44 @@
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { CheckCircle } from 'lucide-react'
+import { useCart } from '@/store/cart'
+import { useEffect } from 'react'
+
+export const Route = createFileRoute('/checkout/success')({
+  component: CheckoutSuccess,
+})
+
+function CheckoutSuccess() {
+  const { clearCart } = useCart()
+
+  useEffect(() => {
+    clearCart()
+  }, [])
+
+  return (
+    <div className="min-h-[70vh] flex items-center justify-center p-5">
+      <div className="bg-white rounded-2xl p-12 border border-gray-200 shadow-sm text-center max-w-lg w-full">
+        <div className="flex justify-center mb-6">
+          <CheckCircle size={64} className="text-green-500" />
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">Order Confirmed!</h1>
+        <p className="text-gray-600 mb-8 leading-relaxed">
+          Thank you for your purchase. You will receive a confirmation email shortly. Your order is on its way!
+        </p>
+        <div className="space-y-3">
+          <Link
+            to="/products"
+            className="block w-full py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors"
+          >
+            Continue Shopping
+          </Link>
+          <Link
+            to="/"
+            className="block w-full py-3 border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
