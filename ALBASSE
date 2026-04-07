@@ -4,203 +4,488 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Albasse Shopping</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#f5f5f5}
-header{background:#111;color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center}
-header h1{color:#f9b233}
-nav a{color:#fff;margin:0 10px;text-decoration:none}
-.cart,.account{background:#f9b233;padding:8px 15px;border-radius:10px;cursor:pointer;color:black;font-weight:bold;margin-left:10px}
-.hero{height:60vh;background:url('https://images.unsplash.com/photo-1521336575822-6da63fb45455') center/cover;display:flex;align-items:center;justify-content:center;color:white;text-align:center}
-.hero h2{font-size:40px;background:rgba(0,0,0,0.5);padding:20px}
-.products{padding:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.product{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,0.1);transition:.3s}
-.product:hover{transform:translateY(-5px)}
-.product img{width:100%;height:250px;object-fit:cover}
-.product-content{padding:15px}
-.price{color:#f9b233;font-weight:bold}
-.btn{display:block;margin-top:10px;padding:10px;background:#111;color:white;text-align:center;border-radius:10px;cursor:pointer}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:15px;border-radius:50%;font-size:20px}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center}
-.modal-content{background:white;padding:20px;border-radius:15px;width:300px}
-.modal input,select{width:100%;padding:10px;margin:5px 0}
-footer{background:#111;color:white;text-align:center;padding:20px;margin-top:40px}
+:root{--gold:#f9b233;--dark:#111;--gray:#f5f5f5}
+body{background:var(--gray);color:var(--dark)}
+
+/* HEADER */
+header{background:var(--dark);color:#fff;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+header h1{color:var(--gold);font-size:22px;letter-spacing:1px}
+nav a{color:#ccc;margin:0 12px;text-decoration:none;font-size:14px;transition:.2s}
+nav a:hover{color:var(--gold)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-header{background:var(--gold);padding:8px 16px;border-radius:25px;cursor:pointer;color:black;font-weight:600;font-size:13px;border:none;display:flex;align-items:center;gap:5px;transition:.2s}
+.btn-header:hover{opacity:.85}
+#cart-count{background:#e74c3c;color:white;border-radius:50%;padding:1px 6px;font-size:11px;font-weight:700}
+
+/* HERO */
+.hero{height:65vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);display:flex;align-items:center;justify-content:center;color:white;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1521336575822-6da63fb45455?w=1200') center/cover;opacity:.2}
+.hero-content{position:relative;z-index:1}
+.hero h2{font-size:42px;font-weight:700;margin-bottom:10px}
+.hero h2 span{color:var(--gold)}
+.hero p{font-size:16px;color:#ccc;margin-bottom:25px}
+.hero-btn{background:var(--gold);color:black;padding:12px 30px;border-radius:30px;font-weight:600;cursor:pointer;border:none;font-size:15px;transition:.2s}
+.hero-btn:hover{transform:scale(1.05)}
+
+/* FILTERS */
+.filters{display:flex;gap:10px;padding:25px 40px 10px;flex-wrap:wrap;align-items:center}
+.filters span{font-weight:600;color:#555}
+.filter-btn{background:white;border:2px solid #ddd;padding:7px 18px;border-radius:25px;cursor:pointer;font-size:13px;transition:.2s}
+.filter-btn:hover,.filter-btn.active{background:var(--gold);border-color:var(--gold);font-weight:600}
+.search-bar{margin-left:auto;display:flex;align-items:center;background:white;border-radius:25px;padding:6px 15px;gap:8px;border:2px solid #ddd}
+.search-bar input{border:none;outline:none;font-size:14px;width:200px}
+
+/* PRODUCTS */
+.products{padding:20px 40px 60px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:25px}
+.product{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:.3s;position:relative}
+.product:hover{transform:translateY(-6px);box-shadow:0 10px 25px rgba(0,0,0,0.15)}
+.product-badge{position:absolute;top:12px;left:12px;background:var(--gold);color:black;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.product img{width:100%;height:240px;object-fit:cover}
+.product-content{padding:18px}
+.product-content h3{font-size:15px;margin-bottom:5px}
+.product-content .cat{font-size:12px;color:#888;margin-bottom:8px}
+.price{color:var(--gold);font-weight:700;font-size:18px}
+.price-old{color:#aaa;font-size:12px;text-decoration:line-through;margin-left:6px}
+.product-actions{display:flex;gap:8px;margin-top:12px}
+.btn-add{flex:1;padding:10px;background:var(--dark);color:white;text-align:center;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:.2s;border:none}
+.btn-add:hover{background:#333}
+.btn-fav{padding:10px 14px;background:#f5f5f5;border-radius:10px;cursor:pointer;border:none;font-size:16px;transition:.2s}
+.btn-fav:hover{background:#ffe;color:red}
+.btn-fav.active{background:#fff0f0}
+
+/* CART PANEL */
+.cart-panel{position:fixed;top:0;right:-380px;width:370px;height:100%;background:white;box-shadow:-5px 0 20px rgba(0,0,0,0.15);z-index:500;transition:.35s;display:flex;flex-direction:column}
+.cart-panel.open{right:0}
+.cart-header{background:var(--dark);color:white;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.cart-header h3{font-size:18px}
+.cart-close{background:none;border:none;color:white;font-size:22px;cursor:pointer}
+.cart-items{flex:1;overflow-y:auto;padding:15px}
+.cart-item{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:#f9f9f9;margin-bottom:10px}
+.cart-item img{width:60px;height:60px;object-fit:cover;border-radius:10px}
+.cart-item-info{flex:1}
+.cart-item-info h4{font-size:13px;margin-bottom:3px}
+.cart-item-info .item-price{color:var(--gold);font-weight:700;font-size:14px}
+.cart-item-remove{background:none;border:none;color:#e74c3c;font-size:18px;cursor:pointer}
+.cart-footer{padding:20px;border-top:1px solid #eee}
+.cart-total{display:flex;justify-content:space-between;font-size:16px;font-weight:600;margin-bottom:15px}
+.cart-total span:last-child{color:var(--gold);font-size:20px}
+.btn-checkout{width:100%;padding:14px;background:var(--gold);color:black;font-weight:700;font-size:15px;border:none;border-radius:12px;cursor:pointer;transition:.2s}
+.btn-checkout:hover{background:#e6a020}
+.cart-empty{text-align:center;color:#aaa;margin-top:60px;font-size:14px}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:600;backdrop-filter:blur(3px)}
+.modal.show{display:flex}
+.modal-box{background:white;padding:30px;border-radius:20px;width:360px;max-width:95vw;animation:popIn .25s ease}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-box h3{margin-bottom:20px;font-size:20px}
+.modal-box input,.modal-box select{width:100%;padding:11px 14px;margin:6px 0;border:1.5px solid #ddd;border-radius:10px;font-size:14px;outline:none;transition:.2s}
+.modal-box input:focus,.modal-box select:focus{border-color:var(--gold)}
+.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#999}
+.btn-primary{width:100%;padding:12px;background:var(--dark);color:white;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;margin-top:8px;transition:.2s}
+.btn-primary:hover{background:#333}
+.btn-gold{background:var(--gold);color:black}
+.btn-gold:hover{background:#e6a020}
+.tab-btns{display:flex;gap:8px;margin-bottom:18px}
+.tab-btn{flex:1;padding:9px;border:2px solid #eee;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;background:white;transition:.2s}
+.tab-btn.active{border-color:var(--gold);background:#fff8e6}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:#333;color:white;padding:12px 24px;border-radius:30px;font-size:14px;z-index:1000;transition:.4s;opacity:0}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:400;display:none}
+.overlay.show{display:block}
+
+/* WHATSAPP */
+.whatsapp-btn{position:fixed;bottom:25px;right:25px;background:#25D366;color:white;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 4px 15px rgba(37,211,102,.5);transition:.2s;z-index:300}
+.whatsapp-btn:hover{transform:scale(1.1)}
+
+/* ADMIN BTN */
+.admin-btn{position:fixed;bottom:25px;left:25px;padding:10px 18px;border:none;background:#333;color:white;border-radius:25px;cursor:pointer;font-size:13px;font-weight:600;z-index:300;transition:.2s}
+.admin-btn:hover{background:var(--gold);color:black}
+
+/* USER INFO */
+.user-info{font-size:12px;color:#aaa;margin-top:6px;text-align:center}
+
+footer{background:var(--dark);color:#aaa;text-align:center;padding:25px;font-size:13px}
+footer strong{color:var(--gold)}
+
+.no-results{text-align:center;color:#aaa;padding:60px;grid-column:1/-1;font-size:15px}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-<h1>Albasse Shopping</h1>
-<nav>
-<a href="#">Accueil</a>
-<a href="#">Produits</a>
-</nav>
-<div style="display:flex;align-items:center;">
-<div class="account" onclick="openAuth()">👤 Compte</div>
-<div class="cart" onclick="showCart()">🛒 (<span id="cart-count">0</span>)</div>
-</div>
+  <h1>🛍️ Albasse</h1>
+  <nav>
+    <a href="#" onclick="filterCat('all')">Accueil</a>
+    <a href="#" onclick="filterCat('all')">Produits</a>
+  </nav>
+  <div class="header-actions">
+    <button class="btn-header" onclick="openAuth()">👤 <span id="user-label">Compte</span></button>
+    <button class="btn-header" onclick="toggleCart()">🛒 <span id="cart-count">0</span></button>
+  </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
-<h2>Style & Élégance au Tchad</h2>
+  <div class="hero-content">
+    <h2>Style & <span>Élégance</span> au Tchad</h2>
+    <p>Les meilleures marques livrées à N'Djamena</p>
+    <button class="hero-btn" onclick="document.querySelector('.products').scrollIntoView({behavior:'smooth'})">Découvrir les produits ↓</button>
+  </div>
 </section>
 
-<section class="products">
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1526178613552-2b45c6c302f0">
-<div class="product-content">
-<h3>Parfum Homme Premium</h3>
-<p class="price">25 000 FCFA</p>
-<div class="btn" onclick="addToCart('Parfum',25000)">Ajouter</div>
-</div>
-</div>
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
-<div class="product-content">
-<h3>Chaussure Luxe</h3>
-<p class="price">40 000 FCFA</p>
-<div class="btn" onclick="addToCart('Chaussure',40000)">Ajouter</div>
-</div>
+<!-- FILTERS -->
+<div class="filters">
+  <span>Catégories :</span>
+  <button class="filter-btn active" onclick="filterCat('all',this)">Tous</button>
+  <button class="filter-btn" onclick="filterCat('parfum',this)">Parfums</button>
+  <button class="filter-btn" onclick="filterCat('chaussure',this)">Chaussures</button>
+  <button class="filter-btn" onclick="filterCat('sac',this)">Sacs</button>
+  <button class="filter-btn" onclick="filterCat('vetement',this)">Vêtements</button>
+  <div class="search-bar">
+    🔍 <input type="text" placeholder="Rechercher..." oninput="searchProducts(this.value)">
+  </div>
 </div>
 
-</section>
+<!-- PRODUCTS -->
+<section class="products" id="products-grid"></section>
 
-<!-- AUTH -->
+<!-- CART PANEL -->
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 Mon Panier</h3>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cart-total-price">0 FCFA</span></div>
+    <button class="btn-checkout" onclick="openCheckout()">Passer la commande →</button>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
 <div class="modal" id="authModal">
-<div class="modal-content">
-<h3>Compte</h3>
-<input type="text" id="name" placeholder="Nom">
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Mot de passe">
-<div class="btn" onclick="register()">S'inscrire</div>
-<div class="btn" onclick="login()">Se connecter</div>
-</div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <h3>👤 Mon Compte</h3>
+    <div class="tab-btns">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Se connecter</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">S'inscrire</button>
+    </div>
+    <div id="login-form">
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Mot de passe">
+      <button class="btn-primary btn-gold" onclick="login()">Se connecter</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <input type="text" id="reg-name" placeholder="Nom complet">
+      <input type="email" id="reg-email" placeholder="Email">
+      <input type="text" id="reg-phone" placeholder="Téléphone">
+      <input type="password" id="reg-password" placeholder="Mot de passe">
+      <button class="btn-primary btn-gold" onclick="register()">Créer mon compte</button>
+    </div>
+  </div>
 </div>
 
-<!-- CHECKOUT -->
+<!-- CHECKOUT MODAL -->
 <div class="modal" id="checkoutModal">
-<div class="modal-content">
-<h3>Livraison & Paiement</h3>
-<input type="text" id="address" placeholder="Quartier (N'Djamena)">
-<select id="payment">
-<option value="Airtel Money">Airtel Money</option>
-<option value="Moov Money">Moov Money</option>
-</select>
-<div class="btn" onclick="confirmOrder()">Confirmer</div>
-</div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+    <h3>📦 Livraison & Paiement</h3>
+    <div id="order-summary" style="background:#f9f9f9;border-radius:10px;padding:12px;margin-bottom:15px;font-size:13px"></div>
+    <input type="text" id="address" placeholder="Quartier / Adresse (N'Djamena)">
+    <input type="text" id="phone-order" placeholder="Numéro de téléphone">
+    <select id="payment">
+      <option value="Airtel Money">💳 Airtel Money</option>
+      <option value="Moov Money">💳 Moov Money</option>
+      <option value="Espèces">💵 Paiement à la livraison</option>
+    </select>
+    <button class="btn-primary btn-gold" onclick="confirmOrder()">✅ Confirmer via WhatsApp</button>
+  </div>
 </div>
 
-<!-- ADMIN -->
+<!-- ADMIN MODAL -->
 <div class="modal" id="adminModal">
-<div class="modal-content">
-<h3>Admin - Ajouter produit</h3>
-<input type="text" id="pname" placeholder="Nom produit">
-<input type="number" id="pprice" placeholder="Prix">
-<input type="text" id="pimage" placeholder="URL image">
-<div class="btn" onclick="addProduct()">Ajouter produit</div>
-</div>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    <h3>⚙️ Panneau Admin</h3>
+    <input type="text" id="pname" placeholder="Nom du produit">
+    <input type="number" id="pprice" placeholder="Prix (FCFA)">
+    <input type="number" id="pprice-old" placeholder="Ancien prix (optionnel)">
+    <input type="text" id="pimage" placeholder="URL de l'image">
+    <select id="pcat">
+      <option value="parfum">Parfum</option>
+      <option value="chaussure">Chaussure</option>
+      <option value="sac">Sac</option>
+      <option value="vetement">Vêtement</option>
+    </select>
+    <input type="text" id="pbadge" placeholder="Badge (ex: Nouveau, -20%)">
+    <button class="btn-primary btn-gold" onclick="addProduct()">➕ Ajouter le produit</button>
+  </div>
 </div>
 
-<div class="whatsapp" onclick="openCheckout()">💳</div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-<button onclick="openAdmin()" style="position:fixed;bottom:20px;left:20px;padding:10px;border:none;background:black;color:white;border-radius:10px;">ADMIN</button>
+<!-- FAB -->
+<div class="whatsapp-btn" title="Commander via WhatsApp" onclick="openCheckout()">💬</div>
+<button class="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
 
 <footer>
-<p>Contact: 60 60 51 51 | N'Djamena</p>
+  <p><strong>Albasse Shopping</strong> — Style & Élégance au Tchad</p>
+  <p style="margin-top:6px">📞 60 60 51 51 &nbsp;|&nbsp; 📍 N'Djamena, Tchad</p>
 </footer>
 
 <script>
-let cart=[];let user=null;
+// ─── DATA ───
+let cart = [];
+let user = null;
+let favorites = new Set();
+let currentFilter = 'all';
+let searchQuery = '';
 
-// PANIER
-function addToCart(n,p){
-if(!user){alert('Connectez-vous');return;}
-cart.push({n,p});
-document.getElementById('cart-count').innerText=cart.length;
+let products = [
+  {id:1, name:'Parfum Homme Premium', price:25000, oldPrice:30000, cat:'parfum', badge:'Best-seller',
+   img:'https://images.unsplash.com/photo-1526178613552-2b45c6c302f0?w=400'},
+  {id:2, name:'Chaussure Luxe Nike', price:40000, oldPrice:null, cat:'chaussure', badge:'',
+   img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400'},
+  {id:3, name:'Sac à Main Élégant', price:35000, oldPrice:45000, cat:'sac', badge:'-22%',
+   img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'},
+  {id:4, name:'Parfum Femme Floral', price:22000, oldPrice:null, cat:'parfum', badge:'Nouveau',
+   img:'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400'},
+  {id:5, name:'Veste Homme Moderne', price:50000, oldPrice:60000, cat:'vetement', badge:'',
+   img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400'},
+  {id:6, name:'Sac à Dos Casual', price:18000, oldPrice:null, cat:'sac', badge:'',
+   img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'},
+];
+let nextId = 7;
+
+// ─── RENDER ───
+function renderProducts() {
+  const grid = document.getElementById('products-grid');
+  let filtered = products.filter(p => {
+    const matchCat = currentFilter === 'all' || p.cat === currentFilter;
+    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="no-results">😕 Aucun produit trouvé</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="product" id="prod-${p.id}">
+      ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      <div class="product-content">
+        <div class="cat">${catLabel(p.cat)}</div>
+        <h3>${p.name}</h3>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span class="price">${p.price.toLocaleString('fr-FR')} FCFA</span>
+          ${p.oldPrice ? `<span class="price-old">${p.oldPrice.toLocaleString('fr-FR')}</span>` : ''}
+        </div>
+        <div class="product-actions">
+          <button class="btn-add" onclick="addToCart(${p.id})">🛒 Ajouter</button>
+          <button class="btn-fav ${favorites.has(p.id)?'active':''}" onclick="toggleFav(${p.id})" title="Favori">❤️</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
-function showCart(){
-let m='Panier:\n';let t=0;
-cart.forEach(i=>{m+=i.n+' - '+i.p+' FCFA\n';t+=i.p});
-m+='Total: '+t+' FCFA';
-alert(m);
+function catLabel(c) {
+  return {parfum:'Parfum',chaussure:'Chaussure',sac:'Sac',vetement:'Vêtement'}[c] || c;
 }
 
-// AUTH
-function openAuth(){
-document.getElementById('authModal').style.display='flex';
+// ─── CART ───
+function addToCart(id) {
+  if (!user) { showToast('👤 Connectez-vous pour acheter !'); openAuth(); return; }
+  const p = products.find(x => x.id === id);
+  cart.push({...p});
+  updateCartUI();
+  showToast(`✅ ${p.name} ajouté au panier !`);
 }
 
-function register(){
-let n=name.value,e=email.value,p=password.value;
-localStorage.setItem('user',JSON.stringify({n,e,p}));
-alert('Compte créé');
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  updateCartUI();
 }
 
-function login(){
-let e=email.value,p=password.value;
-let u=JSON.parse(localStorage.getItem('user'));
-if(u&&u.e===e&&u.p===p){
-user=u;
-alert('Bienvenue '+u.n);
-authModal.style.display='none';
-}else alert('Erreur');
+function updateCartUI() {
+  document.getElementById('cart-count').textContent = cart.length;
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  document.getElementById('cart-total-price').textContent = total.toLocaleString('fr-FR') + ' FCFA';
+
+  const el = document.getElementById('cart-items');
+  if (!cart.length) {
+    el.innerHTML = '<div class="cart-empty">🛒<br><br>Votre panier est vide</div>';
+    return;
+  }
+  el.innerHTML = cart.map((item, i) => `
+    <div class="cart-item">
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+        <div class="item-price">${item.price.toLocaleString('fr-FR')} FCFA</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${i})">🗑️</button>
+    </div>
+  `).join('');
 }
 
-// CHECKOUT
-function openCheckout(){
-if(cart.length===0){alert('Panier vide');return;}
-checkoutModal.style.display='flex';
+function toggleCart() {
+  document.getElementById('cartPanel').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
 }
 
-function confirmOrder(){
-let addr=document.getElementById('address').value;
-let pay=document.getElementById('payment').value;
-let text='Commande Albasse:%0A';
-let total=0;
-
-cart.forEach(i=>{
-text+=i.n+' - '+i.p+' FCFA%0A';
-total+=i.p;
-});
-
-text+='Total: '+total+' FCFA%0AAdresse: '+addr+'%0APaiement: '+pay;
-
-window.open('https://wa.me/23560605151?text='+text,'_blank');
+// ─── FAVORITES ───
+function toggleFav(id) {
+  favorites.has(id) ? favorites.delete(id) : favorites.add(id);
+  renderProducts();
 }
 
-// ADMIN
-let adminPassword = "admin123";
-
-function openAdmin(){
-let pass = prompt("Mot de passe admin");
-if(pass===adminPassword){
-adminModal.style.display='flex';
-}else alert("Accès refusé");
+// ─── FILTERS ───
+function filterCat(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderProducts();
 }
 
-function addProduct(){
-let name=document.getElementById('pname').value;
-let price=document.getElementById('pprice').value;
-let image=document.getElementById('pimage').value;
-
-let html=`
-<div class="product">
-<img src="${image}">
-<div class="product-content">
-<h3>${name}</h3>
-<p class="price">${price} FCFA</p>
-<div class="btn" onclick="addToCart('${name}',${price})">Ajouter</div>
-</div>
-</div>`;
-
-document.querySelector('.products').innerHTML+=html;
-alert('Produit ajouté');
+function searchProducts(q) {
+  searchQuery = q;
+  renderProducts();
 }
+
+// ─── AUTH ───
+function openAuth() {
+  document.getElementById('authModal').classList.add('show');
+}
+
+function switchTab(tab) {
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+}
+
+function register() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const pwd = document.getElementById('reg-password').value;
+  if (!name || !email || !pwd) { showToast('⚠️ Remplissez tous les champs'); return; }
+  const userData = {name, email, phone, pwd};
+  user = userData;
+  document.getElementById('user-label').textContent = name.split(' ')[0];
+  closeModal('authModal');
+  showToast(`🎉 Bienvenue ${name} !`);
+}
+
+function login() {
+  const email = document.getElementById('login-email').value.trim();
+  const pwd = document.getElementById('login-password').value;
+  // Simplified login
+  if (!email || !pwd) { showToast('⚠️ Remplissez tous les champs'); return; }
+  user = {name: email.split('@')[0], email, phone:''};
+  document.getElementById('user-label').textContent = user.name;
+  closeModal('authModal');
+  showToast(`✅ Connecté avec succès !`);
+}
+
+// ─── CHECKOUT ───
+function openCheckout() {
+  if (!user) { showToast('👤 Connectez-vous d\'abord !'); openAuth(); return; }
+  if (!cart.length) { showToast('🛒 Votre panier est vide !'); return; }
+  // Close cart panel
+  document.getElementById('cartPanel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+
+  // Order summary
+  const total = cart.reduce((s, i) => s + i.price, 0);
+  let html = cart.map(i => `<div style="display:flex;justify-content:space-between"><span>${i.name}</span><strong>${i.price.toLocaleString('fr-FR')} FCFA</strong></div>`).join('');
+  html += `<hr style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-weight:700"><span>Total</span><span style="color:var(--gold)">${total.toLocaleString('fr-FR')} FCFA</span></div>`;
+  document.getElementById('order-summary').innerHTML = html;
+
+  document.getElementById('checkoutModal').classList.add('show');
+}
+
+function confirmOrder() {
+  const addr = document.getElementById('address').value.trim();
+  const phone = document.getElementById('phone-order').value.trim();
+  const pay = document.getElementById('payment').value;
+  if (!addr || !phone) { showToast('⚠️ Renseignez votre adresse et téléphone'); return; }
+
+  let text = `🛍️ *Commande Albasse Shopping*%0A%0A`;
+  let total = 0;
+  cart.forEach(i => {
+    text += `• ${i.name} — ${i.price.toLocaleString('fr-FR')} FCFA%0A`;
+    total += i.price;
+  });
+  text += `%0A💰 *Total : ${total.toLocaleString('fr-FR')} FCFA*%0A`;
+  text += `📍 *Adresse :* ${addr}%0A`;
+  text += `📞 *Téléphone :* ${phone}%0A`;
+  text += `💳 *Paiement :* ${pay}%0A`;
+  text += `%0AMerci ! 🙏`;
+
+  window.open(`https://wa.me/23560605151?text=${text}`, '_blank');
+  cart = [];
+  updateCartUI();
+  closeModal('checkoutModal');
+  showToast('✅ Commande envoyée sur WhatsApp !');
+}
+
+// ─── ADMIN ───
+function openAdmin() {
+  const pass = prompt('Mot de passe administrateur :');
+  if (pass === 'admin123') {
+    document.getElementById('adminModal').classList.add('show');
+  } else if (pass !== null) {
+    showToast('❌ Mot de passe incorrect');
+  }
+}
+
+function addProduct() {
+  const name = document.getElementById('pname').value.trim();
+  const price = parseInt(document.getElementById('pprice').value);
+  const oldPrice = parseInt(document.getElementById('pprice-old').value) || null;
+  const img = document.getElementById('pimage').value.trim();
+  const cat = document.getElementById('pcat').value;
+  const badge = document.getElementById('pbadge').value.trim();
+
+  if (!name || !price || !img) { showToast('⚠️ Remplissez les champs obligatoires'); return; }
+
+  products.unshift({id: nextId++, name, price, oldPrice, img, cat, badge});
+  renderProducts();
+  closeModal('adminModal');
+  showToast(`✅ "${name}" ajouté avec succès !`);
+}
+
+// ─── UTILS ───
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ───
+updateCartUI();
+renderProducts();
 </script>
-
 </body>
 </html>
